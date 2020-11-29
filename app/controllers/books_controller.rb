@@ -1,5 +1,5 @@
-class BooklistsController < ApplicationController
-  def new
+class BooksController < ApplicationController
+   def new
     @book = Book.new
 
   end
@@ -10,11 +10,12 @@ class BooklistsController < ApplicationController
     # ２. データをデータベースに保存するためのsaveメソッド実行
     if @book.save
     # ３. トップ画面へリダイレクト
-    redirect_to booklist_path(@book)
-    
+    redirect_to book_path(@book)
+    flash[:notice] = "successfully"
   else 
     @books = Book.all
     render 'index'
+    
   end
   
 end
@@ -34,11 +35,20 @@ end
     @book = Book.find(params[:id])
   end
   
+  
+  # 変更部分
   def update
-     book = Book.find(params[:id])
-    book.update(book_params)
-    redirect_to booklist_path(book.id)
+     @book = Book.find(params[:id])
+     if @book.update(book_params)
+    redirect_to book_path(@book)
+    flash[:notice] = "successfully"
+    
+  else
+    render "edit"
   end
+  end
+  #ここまで
+  
   
   def destroy
     book = Book.find(params[:id])  # データ（レコード）を1件取得
